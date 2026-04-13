@@ -22,6 +22,12 @@ kwargs:
   use_basal_projection: False
   mask_attn: False # if true, mask the attention
   distributional_loss: energy
+  perturbation_mode: one_hot
+  gene_embedding_input_dim: 5120
+  use_lowrank_branch: false
+  lowrank_dim: 32
+  use_gated_hybrid: false
+  use_soft_efficacy_weights: false
   regularization: 0.0
   init_from: null # initial checkpoint to start the model
   transformer_backbone_key: GPT2

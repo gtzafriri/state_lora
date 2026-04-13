@@ -25,6 +25,12 @@ kwargs:
   init_from: null
   mmd_num_chunks: 1
   randomize_mmd_chunks: false
+  perturbation_mode: one_hot
+  gene_embedding_input_dim: 5120
+  use_lowrank_branch: false
+  lowrank_dim: 32
+  use_gated_hybrid: false
+  use_soft_efficacy_weights: false
   transformer_backbone_key: llama
   transformer_backbone_kwargs:
       bidirectional_attention: true
