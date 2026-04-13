@@ -578,7 +578,6 @@ def run_tx_predict(args: ap.ArgumentParser):
                     outdir=results_dir,
                     prefix=ct,
                     pdex_kwargs=pdex_kwargs,
-                    batch_size=2048,
                 )
                 evaluator.compute(
                     profile=args.profile,
@@ -812,7 +811,6 @@ def run_tx_predict(args: ap.ArgumentParser):
                 outdir=results_dir,
                 prefix=ct,
                 pdex_kwargs=pdex_kwargs,
-                batch_size=2048,
             )
 
             evaluator.compute(
