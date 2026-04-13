@@ -1,4 +1,16 @@
 #!/usr/bin/env bash
+# Run from repo root, e.g. ubuntu@host:~/state_lora$ ./run_permutations.sh
+#
+# Defaults (override with env vars):
+#   GENE_EMBEDDINGS_FILE  ->  <repo>/data/all_embeddings.pt  (ESM-2 dict .pt for A=1 runs)
+# Put Replogle .h5ad under e.g. ~/data/replogle and set [datasets] replogle in each TOML to that path.
+#
+# One-time on Ubuntu:
+#   mkdir -p ~/state_lora/data ~/data/replogle
+#   # copy or link your ESM-2 gene embeddings to:
+#   #   ~/state_lora/data/all_embeddings.pt
+#   # set each TOML [datasets] replogle = "/home/ubuntu/data/replogle" (or your path)
+
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -6,6 +18,10 @@ RESULTS_DIR="${ROOT_DIR}/results"
 TOML_DIR="${ROOT_DIR}/state_preprint_toml_files/replogle_tomls"
 CELL_LINES=("hepg2" "jurkat" "k562" "rpe1")
 
+# Placeholder-friendly defaults for a typical ~/state_lora checkout on Ubuntu
+: "${GENE_EMBEDDINGS_FILE:=${ROOT_DIR}/data/all_embeddings.pt}"
+
+mkdir -p "${ROOT_DIR}/data"
 mkdir -p "${RESULTS_DIR}"
 
 aggregate_run_metrics() {
@@ -125,8 +141,9 @@ for A in 0 1; do
           )
 
           if [[ ${A} -eq 1 ]]; then
-            if [[ -z "${GENE_EMBEDDINGS_FILE:-}" ]]; then
-              echo "GENE_EMBEDDINGS_FILE must be set when A=1 (gene_embedding mode)." | tee -a "${LOG_FILE}"
+            if [[ ! -f "${GENE_EMBEDDINGS_FILE}" ]]; then
+              echo "A=1 needs gene embeddings at: ${GENE_EMBEDDINGS_FILE}" | tee -a "${LOG_FILE}"
+              echo "Copy your ESM-2 dict .pt there, or: export GENE_EMBEDDINGS_FILE=/path/to/all_embeddings.pt" | tee -a "${LOG_FILE}"
               exit 1
             fi
             TRAIN_CMD+=(
